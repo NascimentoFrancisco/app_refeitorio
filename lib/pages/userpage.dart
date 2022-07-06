@@ -27,6 +27,8 @@ class _UserPageState extends State<UserPage> {
 
   bool validarefeicao = retornaValidadoRefeicao();
   Refeicao refeicaoDisponivel = retornaRefeicaoDisponivel();
+
+  bool refeicaoNula = verificaRefeicaoNula();
   
   Horarios horarioDeAlmoco = retornaHorarioAlomco();
   Horarios horarioDeJanta = retornaHorarioJanta();
@@ -61,10 +63,13 @@ class _UserPageState extends State<UserPage> {
 
   Widget RetornaPage(){// Essa função retorna ou não uma refeição disponível
     print(validarefeicao);
+    if(!validarefeicao){
+      return ForaDeHorario();
+    }
     if(validaAlmocoPrioridade() || validaJantaPrioridade()){
       return RefeicaoDisponivel();
     }else if((validaAlmocoNaoPrioridade() || validaJantaNaoPrioridade()) &&(validaHorarioAlmoco() || validaHorarioJanta())){
-      return ForaDeHorario();
+      return RefeicaoDisponivel();
     }else {
       return ForaDeHorario();
     }
