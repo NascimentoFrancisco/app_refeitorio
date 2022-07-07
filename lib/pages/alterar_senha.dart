@@ -43,7 +43,7 @@ class _AlterarSenhaState extends State<AlterarSenha> {
                   controller: _SenhaAntigaControler,
                   obscureText: true,
                   decoration: InputDecoration(
-                    labelText: 'Inisra sua senha antiga',
+                    labelText: 'Insira sua senha antiga',
                     border: OutlineInputBorder(),
                     focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide(

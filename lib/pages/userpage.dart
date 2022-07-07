@@ -27,8 +27,6 @@ class _UserPageState extends State<UserPage> {
 
   bool validarefeicao = retornaValidadoRefeicao();
   Refeicao refeicaoDisponivel = retornaRefeicaoDisponivel();
-
-  bool refeicaoNula = verificaRefeicaoNula();
   
   Horarios horarioDeAlmoco = retornaHorarioAlomco();
   Horarios horarioDeJanta = retornaHorarioJanta();

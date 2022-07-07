@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 
+import '../buscas/busca_horarios.dart';
 import '../pages/alterar_senha.dart';
 import '../pages/loginpage.dart';
 
@@ -60,6 +61,8 @@ class _AppBarAppState extends State<AppBarApp> {
               leading: Icon(Icons.logout),
               title: Text('Sair'),
               onTap: () {
+                limpa_lista_horarios();
+                Navigator.of(context).pop();
                 Navigator.pushReplacement(context, 
                   MaterialPageRoute(builder: (context) => LoginPage())
                 );

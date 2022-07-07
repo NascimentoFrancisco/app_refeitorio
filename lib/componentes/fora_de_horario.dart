@@ -55,7 +55,7 @@ class _ForaDeHorarioState extends State<ForaDeHorario> {
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 10.0),
                         child: Text(
-                          'Atenção! Fora do horário de reserva/cancelamento',
+                          'Atenção! Fora do horário de reserva ou cancelamento de reserva',
                           style: TextStyle(color: Colors.black, fontSize: 16),
                         ),
                       )

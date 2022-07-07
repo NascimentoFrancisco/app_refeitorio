@@ -17,6 +17,9 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController _userController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
 
+  bool espera = false;
+  String mensagem_de_erro = retorna_mensagem_erro();
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -45,10 +48,11 @@ class _LoginPageState extends State<LoginPage> {
                 TextField(
                   controller: _userController,
                   keyboardType: TextInputType.number,
+                  maxLength: 11,
                   decoration: InputDecoration(
                       border: OutlineInputBorder(),
                       labelText: 'Insira seu CPF',
-                      hintText: '000.000.000-00',
+                      hintText: '00000000000',
                       focusedBorder: OutlineInputBorder(
                           borderSide:
                               BorderSide(color: Colors.greenAccent, width: 3)),
@@ -73,12 +77,22 @@ class _LoginPageState extends State<LoginPage> {
                 const SizedBox(height: 30),
                 ElevatedButton(
                     onPressed: () async{
+                      setState(() {
+                          espera = true;
+                        });
                       var login = await buscarUser(_userController.text, _passwordController.text);
                       if(login){
+                        setState(() {
+                          espera = false;
+                        });
                         Navigator.pushReplacement(context, 
                           MaterialPageRoute(builder: (context) => UserPage())
                         );
                       }else{
+                        setState(() {
+                          espera = false;
+                        });
+                        showerro();
                         print('Dados errados');
                       }
                     },
@@ -87,12 +101,43 @@ class _LoginPageState extends State<LoginPage> {
                     child: const Text(
                       'ENTRAR',
                       style: TextStyle(color: Colors.white, fontSize: 20),
-                    ))
+                    )
+                  ),
+                const SizedBox(height: 40),
+                Column(
+                  children: [
+                    Padding(padding: EdgeInsets.all(4.0),
+                      child: espera ?CircularProgressIndicator():Text(''),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(espera ?'ENTRANDO...':'' )
+                  ],
+                )
               ],
             ),
           ),
         ),
       ),
     ));
+  }
+  void showerro(){
+    setState(() {
+      mensagem_de_erro=retorna_mensagem_erro();
+    });
+    showDialog(
+      context: context, 
+      builder: (context) => AlertDialog(
+        title: Text('Erro'),
+        content: Text(mensagem_de_erro),
+        actions: [
+          TextButton(onPressed: () {
+            Navigator.of(context).pop();
+          }, 
+            child: const Text('Frchar'),
+            style: TextButton.styleFrom(primary: Colors.red),
+          ),
+        ],
+      )
+    );
   }
 }

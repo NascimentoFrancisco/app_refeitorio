@@ -6,6 +6,7 @@ import 'dart:convert';
 import '../autorizacao/autorizacao.dart';
 
 List<Reservas>ListRservasDoAluno = [];
+DateTime _dataHoje = DateTime.now();
 
 Future buscaReservasDeUmAluno(String nome_usuario,String senha,String id_aluno)async{
   //aluno/2/reservas
@@ -29,9 +30,7 @@ Future buscaReservasDeUmAluno(String nome_usuario,String senha,String id_aluno)a
 
       ListRservasDoAluno.add(reserva);  
     });
-    
   }
-  
 }
 
 List<Reservas> retornaRservasDoAluno(){
@@ -39,14 +38,14 @@ List<Reservas> retornaRservasDoAluno(){
 }
 
 
-bool ValidaPossibilidadeRserva(int id_aluno,int id_refeicao){
+bool validaPossibilidadeRserva(int id_aluno,int id_refeicao){
   DateTime _dataHoje = DateTime.now();
   bool validator = true;
   int cont = 0;
 
   ListRservasDoAluno.forEach((element) { 
-    print('${element.aluno_reserva} // $_dataHoje');
-    if(element.aluno_reserva == id_aluno && element.refeicao_reservada == id_refeicao && element.refeicao_reservada == _dataHoje){
+    print('Reserva do aluno ${element.aluno_reserva} // Data hoje:$_dataHoje // Data reserva: ${element.data_reserva}');
+    if(element.aluno_reserva == id_aluno && element.refeicao_reservada == id_refeicao && valida_data_da_reserva(element.data_reserva)){
       cont ++;
     }
   });
@@ -54,6 +53,14 @@ bool ValidaPossibilidadeRserva(int id_aluno,int id_refeicao){
   if(cont > 0){
     validator = false;
   }
+  print(validator);
   return validator;
 
+}
+
+bool valida_data_da_reserva(DateTime data_reserva){
+  if(_dataHoje.year == data_reserva.year && _dataHoje.month == data_reserva.month && _dataHoje.day == data_reserva.day){
+    return true;
+  }
+  return false;
 }

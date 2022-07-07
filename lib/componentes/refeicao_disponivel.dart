@@ -25,7 +25,25 @@ class _RefeicaoDisponivelState extends State<RefeicaoDisponivel> {
 
   bool validarefeicao = retornaValidadoRefeicao();
 
-  bool validacao = ValidaPossibilidadeRserva(retornaAluno().id,retornaRefeicaoDisponivel().id);
+  bool validacao = validaPossibilidadeRserva(retornaAluno().id,retornaRefeicaoDisponivel().id);
+
+  Color cor_pode_reservar = Color.fromARGB(255, 2, 136, 71);
+  Color cor_nao_pode_reservar = Color.fromARGB(255, 219, 8, 8);
+
+  Color cor_texto_pode_reservar = Color.fromARGB(255, 219, 8, 8);
+  Color cor_texto_nao_pode_reservar = Colors.black;
+
+  Color cor_fundo_pode_reservar = Color.fromARGB(255, 245, 227, 144);
+  Color cor_fundo_nao_pode_reservar = Color.fromARGB(255, 20, 184, 184);
+
+  String texto_nao_reserva = 'Você não reservou sua refeição.';
+  String texto_esta_reserva = 'Sua refeição foi reservada.';
+
+  String texto_butao_reservar = 'SOLICITAR RESERVA';
+  String texto_butao_cancelar_reserva = 'CANCELAR RESERVA'; 
+
+  String texto_confirma_reservar = 'Confirma a reserva da refeiçao?';
+  String texto_confirma_cancelamento_reservar = 'Confirma o cancelamento reserva da refeiçao?';
 
   @override
   Widget build(BuildContext context) {
@@ -91,12 +109,12 @@ class _RefeicaoDisponivelState extends State<RefeicaoDisponivel> {
               height: 40,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(4),
-                color: Color.fromARGB(255, 245, 227, 144)
+                color: validacao ? cor_fundo_pode_reservar:cor_fundo_nao_pode_reservar
               ),
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Text('Você não reservou sua refeição.',
-                  style: TextStyle(color: Color.fromARGB(255, 219, 8, 8), fontSize: 14),
+                child: Text(validacao ? texto_nao_reserva:texto_esta_reserva,
+                  style: TextStyle(color: validacao ? cor_texto_pode_reservar:cor_texto_nao_pode_reservar),
                 ),
               ),
             ),
@@ -109,11 +127,11 @@ class _RefeicaoDisponivelState extends State<RefeicaoDisponivel> {
             ElevatedButton(onPressed: () {
               ShowConfirmReserva();
             }, 
-              child: Text('SOLICITAR RESERVA',
+              child: Text(validacao ? texto_butao_reservar:texto_butao_cancelar_reserva,
                 style: TextStyle(color: Colors.white, fontSize: 14),
               ),
               style: ElevatedButton.styleFrom(
-                primary: Color.fromARGB(255, 2, 136, 71)
+                primary: validacao ?cor_pode_reservar:cor_nao_pode_reservar
               ),
             )
           ],
@@ -125,8 +143,8 @@ class _RefeicaoDisponivelState extends State<RefeicaoDisponivel> {
     showDialog(
       context: context, 
       builder: (context) => AlertDialog(
-        title: Text('Confirmação de reserva'),
-        content: Text('Confirma a reserva de janta para hoje?'),
+        title: Text(validacao ?'Confirmação de reserva':'Confirmação de cancelamento de reserva'),
+        content: Text(validacao ?texto_confirma_reservar:texto_confirma_cancelamento_reservar),
         actions: [
           TextButton(onPressed: () {
             Navigator.of(context).pop();

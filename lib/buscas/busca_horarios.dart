@@ -67,3 +67,9 @@ Horarios retornaHorarioJanta(){
     });
   return horarioAlmoco;
 }
+
+void limpa_lista_horarios(){
+  if(ListHorarios.isNotEmpty){
+    ListHorarios = [];
+  }
+}
