@@ -4,6 +4,7 @@ import 'package:app_refeitorio/buscas/busca_aluno_pelo_user.dart';
 import 'package:app_refeitorio/buscas/busca_refeicao_ativas.dart';
 import 'package:app_refeitorio/models/aluno.dart';
 import 'package:app_refeitorio/models/refeicao.dart';
+import 'package:app_refeitorio/repositorios/faz_reserva.dart';
 import 'package:app_refeitorio/repositorios/pega_data_hora_atual.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
@@ -25,6 +26,8 @@ class _RefeicaoDisponivelState extends State<RefeicaoDisponivel> {
 
   bool validarefeicao = retornaValidadoRefeicao();
 
+  final loading = ValueNotifier<bool>(false);
+
   bool validacao = validaPossibilidadeRserva(retornaAluno().id,retornaRefeicaoDisponivel().id);
 
   Color cor_pode_reservar = Color.fromARGB(255, 2, 136, 71);
@@ -44,6 +47,10 @@ class _RefeicaoDisponivelState extends State<RefeicaoDisponivel> {
 
   String texto_confirma_reservar = 'Confirma a reserva da refeiçao?';
   String texto_confirma_cancelamento_reservar = 'Confirma o cancelamento reserva da refeiçao?';
+
+  //Relativo a reservas
+  bool situacao_reserva = retorna_resultado_reserva();
+  String mesnagem_erro_acerto_reseva = retorna_mensagem_erro_reserva();
 
   @override
   Widget build(BuildContext context) {
@@ -152,11 +159,57 @@ class _RefeicaoDisponivelState extends State<RefeicaoDisponivel> {
             child: const Text('Cancelar'),
             style: TextButton.styleFrom(primary: Colors.red),
           ),
+          TextButton(
+            child: Text('Confirmar'),
+            style: TextButton.styleFrom(primary: Colors.green),
+            onPressed: () async{
+            if(validacao){
+              await faz_reserva(alunoLog.id,_refeicaoDisponivel.id);
+              setState(() {
+                situacao_reserva = retorna_resultado_reserva();
+              });
+              if(situacao_reserva){
+                setState(() {
+                  _refeicaoDisponivel = retorna_nova_refeicao_disponivel();
+                  mesnagem_erro_acerto_reseva = retorna_mensagem_erro_reserva();
+                  validacao = true;
+                });
+              }else{
+                setState(() {
+                  validacao = false;
+                });
+              }
+              Navigator.of(context).pop();
+              showerro();
+            }else{
+              //Cancelar reserva
+            }
+            //Navigator.of(context).pop();
+          }, 
+          ),
+        ],
+      )
+    );
+  }
+
+  void showerro(){
+    setState(() {
+      mesnagem_erro_acerto_reseva = retorna_mensagem_erro_reserva();
+    });
+    showDialog(
+      context: context, 
+      builder: (context) => AlertDialog(
+        title: Text('Atenção!'),
+        content: Text(mesnagem_erro_acerto_reseva),
+        actions: [
           TextButton(onPressed: () {
+            setState(() {
+              _refeicaoDisponivel = retorna_nova_refeicao_disponivel();
+            });
             Navigator.of(context).pop();
           }, 
-            child: const Text('Confirmar'),
-            style: TextButton.styleFrom(primary: Colors.green),
+            child: const Text('Fechar'),
+            style: TextButton.styleFrom(primary: Colors.red),
           ),
         ],
       )

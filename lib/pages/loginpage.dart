@@ -133,7 +133,7 @@ class _LoginPageState extends State<LoginPage> {
           TextButton(onPressed: () {
             Navigator.of(context).pop();
           }, 
-            child: const Text('Frchar'),
+            child: const Text('Fechar'),
             style: TextButton.styleFrom(primary: Colors.red),
           ),
         ],

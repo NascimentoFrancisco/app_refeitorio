@@ -28,12 +28,13 @@ Horarios horarioDeJanta = retornaHorarioJanta();
 DateTime _horaAtual = DateTime.now();
 
 //late Refeicao refeicaoDisponivel;
- var refeicaoDisponivel;//?
+var refeicaoDisponivel;//?
 
 Future buscaRefeicoesAtivas(String nome_usuario,String senha,String estado)async{
   BasicAuths auth = BasicAuths(usuario: nome_usuario, senha: senha);
   String url = 'https://refeitorio-cacor.herokuapp.com/refeicao/$estado/status';
 
+  print('buscando rfeições ativas');
   var response = await http.get(Uri.parse(url), 
   headers: <String,String>{'authorization':auth.BasicAuth()});
   
@@ -94,7 +95,7 @@ bool retornaValidadoRefeicao(){
       }
     }
   });
-
+  
   ValidadorPrincipal = validador;
   return validador;
 }
