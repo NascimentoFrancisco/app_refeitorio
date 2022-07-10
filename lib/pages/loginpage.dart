@@ -17,7 +17,9 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController _userController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
 
-  bool espera = false;
+  //bool espera = false;
+  final espera = ValueNotifier<bool>(false);
+
   String mensagem_de_erro = retorna_mensagem_erro();
 
   @override
@@ -77,42 +79,36 @@ class _LoginPageState extends State<LoginPage> {
                 const SizedBox(height: 30),
                 ElevatedButton(
                     onPressed: () async{
-                      setState(() {
-                          espera = true;
-                        });
+                      espera.value = !espera.value; 
                       var login = await buscarUser(_userController.text, _passwordController.text);
                       if(login){
-                        setState(() {
-                          espera = false;
-                        });
+                        espera.value = false; 
                         Navigator.pushReplacement(context, 
                           MaterialPageRoute(builder: (context) => UserPage())
                         );
                       }else{
-                        setState(() {
-                          espera = false;
-                        });
+                        espera.value = false; 
                         showerro();
                         print('Dados errados');
                       }
                     },
                     style: ElevatedButton.styleFrom(
                         primary: Color.fromARGB(255, 6, 168, 90)),
-                    child: const Text(
-                      'ENTRAR',
-                      style: TextStyle(color: Colors.white, fontSize: 20),
-                    )
-                  ),
-                const SizedBox(height: 40),
-                Column(
-                  children: [
-                    Padding(padding: EdgeInsets.all(4.0),
-                      child: espera ?CircularProgressIndicator():Text(''),
+                    child: AnimatedBuilder(
+                      animation: espera,
+                      builder: (context, _){
+                        return espera.value
+                        ? const SizedBox(
+                          width: 25,
+                          height: 25,
+                          child: CircularProgressIndicator(color: Colors.white,),
+                        )
+                        :const Text('ENTRAR',
+                          style: TextStyle(color: Colors.white, fontSize: 20),  
+                        );
+                      },
                     ),
-                    const SizedBox(height: 4),
-                    Text(espera ?'ENTRANDO...':'' )
-                  ],
-                )
+                  ),
               ],
             ),
           ),

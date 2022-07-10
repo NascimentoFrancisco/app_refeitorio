@@ -8,6 +8,8 @@ import '../autorizacao/autorizacao.dart';
 List<Reservas>ListRservasDoAluno = [];
 DateTime _dataHoje = DateTime.now();
 
+Reservas? reserva_do_aluno_log;
+
 Future buscaReservasDeUmAluno(String nome_usuario,String senha,String id_aluno)async{
   //aluno/2/reservas
   BasicAuths auth = BasicAuths(usuario: nome_usuario, senha: senha);
@@ -44,9 +46,14 @@ bool validaPossibilidadeRserva(int id_aluno,int id_refeicao){
   int cont = 0;
 
   ListRservasDoAluno.forEach((element) { 
-    print('Reserva do aluno ${element.aluno_reserva} // Data hoje:$_dataHoje // Data reserva: ${element.data_reserva}');
+    //print('Reserva do aluno ${element.aluno_reserva} // Data hoje:$_dataHoje // Data reserva: ${element.data_reserva}');
     if(element.aluno_reserva == id_aluno && element.refeicao_reservada == id_refeicao && valida_data_da_reserva(element.data_reserva)){
       cont ++;
+      reserva_do_aluno_log = Reservas(
+        id: element.id, 
+        data_reserva: element.data_reserva, 
+        aluno_reserva: element.aluno_reserva, 
+        refeicao_reservada: element.refeicao_reservada);
     }
   });
 
@@ -63,4 +70,14 @@ bool valida_data_da_reserva(DateTime data_reserva){
     return true;
   }
   return false;
+}
+
+Reservas? retorna_reserva_aluno_log(){
+  return reserva_do_aluno_log;
+}
+
+void limpa_lista_reservas(){
+  if(ListRservasDoAluno.isNotEmpty){
+    ListRservasDoAluno.clear();
+  }
 }

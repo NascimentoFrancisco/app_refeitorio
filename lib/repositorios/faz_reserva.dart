@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:app_refeitorio/buscas/busca_user.dart';
 import 'package:app_refeitorio/models/refeicao.dart';
+import 'package:app_refeitorio/models/reservas.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 import '../autorizacao/autorizacao.dart';
@@ -22,6 +23,7 @@ DateTime data_reserva = DateTime.now();
 bool reserva_feita = false;
 
 late Refeicao nova_refeicao_disponivel;
+late Reservas nova_rserva;
 
 Future faz_reserva(int aluno_reserva,int refeicao_reservada)async{
 
@@ -38,16 +40,24 @@ Future faz_reserva(int aluno_reserva,int refeicao_reservada)async{
       "data_reserva":data_reserva.toString()
     }
     );
-    print(response.statusCode);
+    //print(response.statusCode);
+    //print(response.body);
 
     if(response.statusCode == 201){
       mensagem = 'Refeição reservada';
-      
+
+      var data = jsonDecode(response.body);
+      nova_rserva = Reservas(
+        id: data['id'], 
+        data_reserva: DateTime.parse(data['data_reserva']).toLocal(), 
+        aluno_reserva: data['aluno_reserva'], 
+        refeicao_reservada: data['refeicao_reservada']);
+
       //limpa_lista_refeicao_disponivel();
-      await atualiza_quantidade_refeicoes_reservadas(refeicao_reservada,quantidade_reservadas);
+      await atualiza_quantidade_refeicoes_reservadas(refeicao_reservada,quantidade_reservadas+1);
       //await buscaRefeicoesAtivas(user_reserva,senha_reserva,'A');
       //await buscaReservasDeUmAluno(user_reserva,senha_reserva,aluno_reserva.toString());
-      bool reserva_feita = true;
+      reserva_feita = true;
     }
 
   }on ClientException{
@@ -70,9 +80,9 @@ String retorna_mensagem_erro_reserva(){
   return mensagem;
 }
 
-Future atualiza_quantidade_refeicoes_reservadas(int id_refeicao,quant_reservadas)async{
+Future atualiza_quantidade_refeicoes_reservadas(int id_refeicao,int quant_reservadas)async{
 
-  quant_reservadas++;
+  //quant_reservadas++;
   var response;
 
   String id = id_refeicao.toString();
@@ -99,6 +109,8 @@ Future atualiza_quantidade_refeicoes_reservadas(int id_refeicao,quant_reservadas
       horario: data['horario'], 
       data_oferta: DateTime.parse(data['data_oferta']).toLocal(), 
       status: data['status']);
+    
+    quantidade_reservadas = nova_refeicao_disponivel.quantidade_reservadas;
 }
 
 Refeicao retorna_nova_refeicao_disponivel(){
@@ -114,4 +126,46 @@ Refeicao retorna_nova_refeicao_disponivel(){
       status: refeicao_disponivel.status);  
   }
   return nova_refeicao_disponivel;
+}
+
+
+Reservas retorna_nova_reserva(){
+  if (nova_rserva == null){
+    nova_rserva = Reservas(
+      id: 0, 
+      data_reserva: DateTime.now(), 
+      aluno_reserva: 0, 
+      refeicao_reservada: 0);
+  }
+  return nova_rserva;
+}
+
+Future cancela_reserva(int id_reserva)async{
+
+  String id_da_reserva = id_reserva.toString();
+  
+  BasicAuths auth = BasicAuths(usuario: user_reserva, senha: senha_reserva);
+  String url = 'https://refeitorio-cacor.herokuapp.com/reservas/$id_da_reserva/';
+  
+  try{
+
+    var response = await http.delete(Uri.parse(url),
+    headers: <String,String>{'authorization':auth.BasicAuth()});
+
+    print(response.statusCode);
+    if(response.statusCode == 204){
+      await atualiza_quantidade_refeicoes_reservadas(refeicao_disponivel.id,quantidade_reservadas-1);
+      mensagem = 'Refeição cancelada!';
+      reserva_feita = false;
+    }
+  }on ClientException{
+    mensagem = 'Erro de conexão';
+    //reserva_feita = false;
+  }on NoSuchMethodError{
+    mensagem = 'Erro de conexão';
+    //reserva_feita = false;
+  }on SocketException{
+    mensagem = 'Erro de conexão';
+    //reserva_feita = false;
+  }
 }

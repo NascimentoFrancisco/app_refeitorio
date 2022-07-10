@@ -4,6 +4,7 @@ import 'package:app_refeitorio/buscas/busca_aluno_pelo_user.dart';
 import 'package:app_refeitorio/buscas/busca_refeicao_ativas.dart';
 import 'package:app_refeitorio/models/aluno.dart';
 import 'package:app_refeitorio/models/refeicao.dart';
+import 'package:app_refeitorio/models/reservas.dart';
 import 'package:app_refeitorio/repositorios/faz_reserva.dart';
 import 'package:app_refeitorio/repositorios/pega_data_hora_atual.dart';
 import 'package:flutter/material.dart';
@@ -51,6 +52,8 @@ class _RefeicaoDisponivelState extends State<RefeicaoDisponivel> {
   //Relativo a reservas
   bool situacao_reserva = retorna_resultado_reserva();
   String mesnagem_erro_acerto_reseva = retorna_mensagem_erro_reserva();
+
+  Reservas? reserva_do_aluno = retorna_reserva_aluno_log();
 
   @override
   Widget build(BuildContext context) {
@@ -160,9 +163,21 @@ class _RefeicaoDisponivelState extends State<RefeicaoDisponivel> {
             style: TextButton.styleFrom(primary: Colors.red),
           ),
           TextButton(
-            child: Text('Confirmar'),
+            child: AnimatedBuilder(
+              animation: loading,
+              builder: (context, _){
+                return loading.value 
+                  ?const SizedBox(
+                    width: 15,
+                    height: 15,
+                    child: CircularProgressIndicator(color: Colors.green,),
+                  )
+                  :Text('Confirmar');
+              },
+            ),
             style: TextButton.styleFrom(primary: Colors.green),
             onPressed: () async{
+              loading.value = !loading.value;
             if(validacao){
               await faz_reserva(alunoLog.id,_refeicaoDisponivel.id);
               setState(() {
@@ -172,7 +187,7 @@ class _RefeicaoDisponivelState extends State<RefeicaoDisponivel> {
                 setState(() {
                   _refeicaoDisponivel = retorna_nova_refeicao_disponivel();
                   mesnagem_erro_acerto_reseva = retorna_mensagem_erro_reserva();
-                  validacao = true;
+                  validacao = false;
                 });
               }else{
                 setState(() {
@@ -183,6 +198,17 @@ class _RefeicaoDisponivelState extends State<RefeicaoDisponivel> {
               showerro();
             }else{
               //Cancelar reserva
+              await cancela_reserva(reserva_do_aluno!.id);
+              setState(() {
+                situacao_reserva = retorna_resultado_reserva();
+              });
+              if(!situacao_reserva){
+                _refeicaoDisponivel = retorna_nova_refeicao_disponivel();
+                mesnagem_erro_acerto_reseva = retorna_mensagem_erro_reserva();
+                validacao = true;
+              }
+              Navigator.of(context).pop();
+              showerro();
             }
             //Navigator.of(context).pop();
           }, 
@@ -205,7 +231,9 @@ class _RefeicaoDisponivelState extends State<RefeicaoDisponivel> {
           TextButton(onPressed: () {
             setState(() {
               _refeicaoDisponivel = retorna_nova_refeicao_disponivel();
+              reserva_do_aluno = retorna_nova_reserva();
             });
+            loading.value = false;
             Navigator.of(context).pop();
           }, 
             child: const Text('Fechar'),

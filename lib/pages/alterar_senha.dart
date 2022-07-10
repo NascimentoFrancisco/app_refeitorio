@@ -18,6 +18,8 @@ class _AlterarSenhaState extends State<AlterarSenha> {
   TextEditingController _SenhaAntigaControler = TextEditingController();
   TextEditingController _SenhaControler = TextEditingController();
   TextEditingController _ConfirmSenhaControler = TextEditingController();
+
+  final loading_pss = ValueNotifier<bool>(false);
   
   @override
   Widget build(BuildContext context) {
@@ -93,9 +95,22 @@ class _AlterarSenhaState extends State<AlterarSenha> {
                   ),
                 ),
                 const SizedBox(height: 30),
-                ElevatedButton(onPressed: () {}, 
-                  child: const Text('ALTERAR SENHA',
-                    style: TextStyle(color: Colors.white, fontSize: 14),
+                ElevatedButton(onPressed: () {
+                  loading_pss.value = !loading_pss.value;
+                }, 
+                  child: AnimatedBuilder(
+                    animation: loading_pss,
+                    builder: (context,_){
+                      return loading_pss.value 
+                      ? const SizedBox(
+                        width: 20,
+                        height: 20,
+                        child: CircularProgressIndicator(color: Colors.white,),
+                      )
+                      :const Text('ALTERAR SENHA',
+                          style: TextStyle(color: Colors.white, fontSize: 14),
+                        );
+                    },
                   ),
                   style: ElevatedButton.styleFrom(
                     primary: Color.fromARGB(255, 6, 168, 90)
