@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 
+import '../repositorios/alterar_senha.dart';
+
 class AlterarSenha extends StatefulWidget {
   const AlterarSenha({Key? key}) : super(key: key);
 
@@ -20,6 +22,9 @@ class _AlterarSenhaState extends State<AlterarSenha> {
   TextEditingController _ConfirmSenhaControler = TextEditingController();
 
   final loading_pss = ValueNotifier<bool>(false);
+
+  String mesnagem_troca_senha = retorna_mensagem();
+  bool validacao_troca_senha = false;
   
   @override
   Widget build(BuildContext context) {
@@ -95,8 +100,9 @@ class _AlterarSenhaState extends State<AlterarSenha> {
                   ),
                 ),
                 const SizedBox(height: 30),
-                ElevatedButton(onPressed: () {
-                  loading_pss.value = !loading_pss.value;
+                ElevatedButton(onPressed: ()async {
+                  loading_pss.value = true;
+                  await efetua_troca_senha(_SenhaAntigaControler.text,_SenhaControler.text,_ConfirmSenhaControler.text);
                 }, 
                   child: AnimatedBuilder(
                     animation: loading_pss,
@@ -122,5 +128,45 @@ class _AlterarSenhaState extends State<AlterarSenha> {
         ),
       )
     );
+  }
+
+  void showerro(){
+    showDialog(
+      context: context, 
+      builder: (context) => AlertDialog(
+        title: Text('Atenção!'),
+        content: Text(mesnagem_troca_senha),
+        actions: [
+          TextButton(onPressed: () {
+            loading_pss.value = false; 
+            Navigator.of(context).pop();
+          }, 
+            child: const Text('Fechar'),
+            style: TextButton.styleFrom(primary: Colors.red),
+          ),
+        ],
+      )
+    );
+  }
+
+  Future efetua_troca_senha(String senha_antiga, String senha_nova, String confirm_senha)async{
+    if(senha_nova != confirm_senha){
+      setState(() {
+        mesnagem_troca_senha = 'Nova senha diferente da confirmação de senha!';    
+      });
+      showerro();
+    }else if(senha_nova == senha_antiga || senha_antiga == confirm_senha){
+       setState(() {
+        mesnagem_troca_senha = 'Nova senha ou a confirmação de senha igual a senha antiga!';    
+      });
+      showerro();
+    }else{
+      await alterar_a_senha(senha_antiga,senha_nova);
+      setState(() {
+        mesnagem_troca_senha = retorna_mensagem();
+        validacao_troca_senha = retorna_situacao();
+      });
+      showerro();
+    }
   }
 }

@@ -29,6 +29,8 @@ class _RefeicaoDisponivelState extends State<RefeicaoDisponivel> {
 
   final loading = ValueNotifier<bool>(false);
 
+  bool get is_clicked_confirm => loading.value == true;
+
   bool validacao = validaPossibilidadeRserva(retornaAluno().id,retornaRefeicaoDisponivel().id);
 
   Color cor_pode_reservar = Color.fromARGB(255, 2, 136, 71);
@@ -48,6 +50,9 @@ class _RefeicaoDisponivelState extends State<RefeicaoDisponivel> {
 
   String texto_confirma_reservar = 'Confirma a reserva da refeiçao?';
   String texto_confirma_cancelamento_reservar = 'Confirma o cancelamento reserva da refeiçao?';
+
+  String reservas_esgotadas = '';
+  bool valida_reserva_esgotadas = false;
 
   //Relativo a reservas
   bool situacao_reserva = retorna_resultado_reserva();
@@ -134,14 +139,30 @@ class _RefeicaoDisponivelState extends State<RefeicaoDisponivel> {
               ),
             ),
             const SizedBox(height: 16.0),
-            ElevatedButton(onPressed: () {
-              ShowConfirmReserva();
-            }, 
+            ElevatedButton(
+              onPressed: valida_reserva_pela_quantidade() ?
+              ShowConfirmReserva:null, 
               child: Text(validacao ? texto_butao_reservar:texto_butao_cancelar_reserva,
                 style: TextStyle(color: Colors.white, fontSize: 14),
               ),
               style: ElevatedButton.styleFrom(
                 primary: validacao ?cor_pode_reservar:cor_nao_pode_reservar
+              ),
+            ),
+            SizedBox(height: 15,),
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(4),
+                color: valida_reserva_esgotadas?cor_nao_pode_reservar:Colors.white
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(reservas_esgotadas,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 20
+                  ),
+                ),
               ),
             )
           ],
@@ -172,46 +193,11 @@ class _RefeicaoDisponivelState extends State<RefeicaoDisponivel> {
                     height: 15,
                     child: CircularProgressIndicator(color: Colors.green,),
                   )
-                  :Text('Confirmar');
+                  :const Text('Confirmar');
               },
             ),
             style: TextButton.styleFrom(primary: Colors.green),
-            onPressed: () async{
-              loading.value = !loading.value;
-            if(validacao){
-              await faz_reserva(alunoLog.id,_refeicaoDisponivel.id);
-              setState(() {
-                situacao_reserva = retorna_resultado_reserva();
-              });
-              if(situacao_reserva){
-                setState(() {
-                  _refeicaoDisponivel = retorna_nova_refeicao_disponivel();
-                  mesnagem_erro_acerto_reseva = retorna_mensagem_erro_reserva();
-                  validacao = false;
-                });
-              }else{
-                setState(() {
-                  validacao = false;
-                });
-              }
-              Navigator.of(context).pop();
-              showerro();
-            }else{
-              //Cancelar reserva
-              await cancela_reserva(reserva_do_aluno!.id);
-              setState(() {
-                situacao_reserva = retorna_resultado_reserva();
-              });
-              if(!situacao_reserva){
-                _refeicaoDisponivel = retorna_nova_refeicao_disponivel();
-                mesnagem_erro_acerto_reseva = retorna_mensagem_erro_reserva();
-                validacao = true;
-              }
-              Navigator.of(context).pop();
-              showerro();
-            }
-            //Navigator.of(context).pop();
-          }, 
+             onPressed: efetua_cancela_reserva
           ),
         ],
       )
@@ -228,7 +214,7 @@ class _RefeicaoDisponivelState extends State<RefeicaoDisponivel> {
         title: Text('Atenção!'),
         content: Text(mesnagem_erro_acerto_reseva),
         actions: [
-          TextButton(onPressed: () {
+          TextButton(onPressed: () { 
             setState(() {
               _refeicaoDisponivel = retorna_nova_refeicao_disponivel();
               reserva_do_aluno = retorna_nova_reserva();
@@ -242,5 +228,52 @@ class _RefeicaoDisponivelState extends State<RefeicaoDisponivel> {
         ],
       )
     );
+  }
+
+  Future efetua_cancela_reserva()async{
+    if(!is_clicked_confirm){
+      loading.value = true;
+      if(validacao){
+        await faz_reserva(alunoLog.id,_refeicaoDisponivel.id);
+        setState(() {
+          situacao_reserva = retorna_resultado_reserva();
+        });
+        if(situacao_reserva){
+          setState(() {
+            _refeicaoDisponivel = retorna_nova_refeicao_disponivel();
+            mesnagem_erro_acerto_reseva = retorna_mensagem_erro_reserva();
+            validacao = false;
+          });
+        }else{
+          setState(() {
+            validacao = false;
+          });
+        }
+        Navigator.of(context).pop();
+        showerro();
+      }else{
+        //Cancelar reserva
+        await cancela_reserva(reserva_do_aluno!.id);
+        setState(() {
+          situacao_reserva = retorna_resultado_reserva();
+        });
+        if(!situacao_reserva){
+          _refeicaoDisponivel = retorna_nova_refeicao_disponivel();
+          mesnagem_erro_acerto_reseva = retorna_mensagem_erro_reserva();
+          validacao = true;
+        }
+        Navigator.of(context).pop();
+          showerro();
+      }
+    }
+  }
+
+  bool valida_reserva_pela_quantidade(){//Precisa alterarisso ainda
+    if(_refeicaoDisponivel.quantidade_reservadas >= _refeicaoDisponivel.quantidade && validacao){
+      valida_reserva_esgotadas = true;
+      reservas_esgotadas = 'RESERVAS ESGOTADAS :(';
+      return false;
+    }
+    return true;
   }
 }

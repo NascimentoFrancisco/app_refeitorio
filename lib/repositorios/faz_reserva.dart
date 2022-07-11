@@ -22,8 +22,8 @@ String mensagem = '';
 DateTime data_reserva = DateTime.now();
 bool reserva_feita = false;
 
-late Refeicao nova_refeicao_disponivel;
-late Reservas nova_rserva;
+var nova_refeicao_disponivel;
+var nova_reserva;
 
 Future faz_reserva(int aluno_reserva,int refeicao_reservada)async{
 
@@ -47,7 +47,7 @@ Future faz_reserva(int aluno_reserva,int refeicao_reservada)async{
       mensagem = 'Refeição reservada';
 
       var data = jsonDecode(response.body);
-      nova_rserva = Reservas(
+      nova_reserva = Reservas(
         id: data['id'], 
         data_reserva: DateTime.parse(data['data_reserva']).toLocal(), 
         aluno_reserva: data['aluno_reserva'], 
@@ -96,7 +96,7 @@ Future atualiza_quantidade_refeicoes_reservadas(int id_refeicao,int quant_reserv
       "quantidade_reservadas":quant_reservadas.toString()
     });
 
-    print(result.body);
+    //print(result.body);
     var data = jsonDecode(result.body);
 
 
@@ -130,14 +130,14 @@ Refeicao retorna_nova_refeicao_disponivel(){
 
 
 Reservas retorna_nova_reserva(){
-  if (nova_rserva == null){
-    nova_rserva = Reservas(
+  if (nova_reserva == null){
+    nova_reserva = Reservas(
       id: 0, 
       data_reserva: DateTime.now(), 
       aluno_reserva: 0, 
       refeicao_reservada: 0);
   }
-  return nova_rserva;
+  return nova_reserva;
 }
 
 Future cancela_reserva(int id_reserva)async{
@@ -152,7 +152,7 @@ Future cancela_reserva(int id_reserva)async{
     var response = await http.delete(Uri.parse(url),
     headers: <String,String>{'authorization':auth.BasicAuth()});
 
-    print(response.statusCode);
+    //print(response.statusCode);
     if(response.statusCode == 204){
       await atualiza_quantidade_refeicoes_reservadas(refeicao_disponivel.id,quantidade_reservadas-1);
       mensagem = 'Refeição cancelada!';

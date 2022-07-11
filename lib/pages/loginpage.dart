@@ -20,6 +20,8 @@ class _LoginPageState extends State<LoginPage> {
   //bool espera = false;
   final espera = ValueNotifier<bool>(false);
 
+  bool get is_clicked => espera.value == true;
+
   String mensagem_de_erro = retorna_mensagem_erro();
 
   @override
@@ -77,21 +79,21 @@ class _LoginPageState extends State<LoginPage> {
                           TextStyle(color: Color.fromARGB(255, 6, 168, 90))),
                 ),
                 const SizedBox(height: 30),
-                ElevatedButton(
-                    onPressed: () async{
-                      espera.value = !espera.value; 
-                      var login = await buscarUser(_userController.text, _passwordController.text);
-                      if(login){
-                        espera.value = false; 
-                        Navigator.pushReplacement(context, 
-                          MaterialPageRoute(builder: (context) => UserPage())
-                        );
-                      }else{
-                        espera.value = false; 
-                        showerro();
-                        print('Dados errados');
-                      }
-                    },
+                ElevatedButton( 
+                     onPressed: efetua_login,
+                    //   espera.value = true; 
+                    //   var login = await buscarUser(_userController.text, _passwordController.text);
+                    //   if(login){
+                    //     espera.value = false; 
+                    //     Navigator.pushReplacement(context, 
+                    //       MaterialPageRoute(builder: (context) => UserPage())
+                    //     );
+                    //   }else{
+                    //     espera.value = false; 
+                    //     showerro();
+                    //     // print('Dados errados');
+                    //   }
+                    // },
                     style: ElevatedButton.styleFrom(
                         primary: Color.fromARGB(255, 6, 168, 90)),
                     child: AnimatedBuilder(
@@ -135,5 +137,22 @@ class _LoginPageState extends State<LoginPage> {
         ],
       )
     );
+  }
+
+  void efetua_login()async{
+    if(!is_clicked){
+      espera.value = true; 
+      var login = await buscarUser(_userController.text, _passwordController.text);
+      if(login){
+        espera.value = false; 
+        Navigator.pushReplacement(context, 
+          MaterialPageRoute(builder: (context) => UserPage())
+        );
+      }else{
+        espera.value = false; 
+        showerro();
+        // print('Dados errados');
+      }
+    }
   }
 }

@@ -16,7 +16,7 @@ Future buscaAlunoPeluUser(String nome_usuario,String senha,String id_user) async
 
   //Url tem que ser alterada
   String url = 'https://refeitorio-cacor.herokuapp.com/user/$parametro/aluno';
-  print('Inicio');
+  //print('Inicio');
   var response = await http.get(Uri.parse(url), 
   headers: <String,String>{'authorization':auth.BasicAuth()});
   

@@ -57,7 +57,7 @@ Future buscarUser(String nome_usuario, String senha)async{
       return true;
     
     }else if(response.statusCode == 401){
-      print('erro 401');
+      //print('erro 401');
       mensagem_erro = 'CPF ou senha incorreto!';
       return false;
     }else{

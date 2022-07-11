@@ -14,29 +14,32 @@ Future alterar_a_senha(String senha,String senha_nova)async{
   BasicAuths auth = BasicAuths(usuario: nome_usuario, senha: senha);
 
   String parametro = senha;
-  print('Início');
-  //Url tem que ser alterada
-  //Essa parte será alterada depois, tudo fará parte de um try/cath
+  //print('Início troca senha');
+  //
   String url = 'https://refeitorio-cacor.herokuapp.com/alterar-senha/';
   
   try{
     var response = await http.put(Uri.parse(url),
-    headers: <String,String>{'authorization':auth.BasicAuth()},
-    body: {'old_password': senha,'new_password': senha_nova} 
+      headers: <String,String>{'authorization':auth.BasicAuth()},
+      body: {'old_password': senha,'new_password': senha_nova} 
     );
 
-    print(response.statusCode);
-    print(response.body);
-    print('Inicio');
+    //print(response.statusCode);
+    //print('Inicio');
+    if(response.statusCode == 200){
+      //print('Alterou');
+      mensagem_troca = 'Senha alterada com sucesso!';
+      situacao_alteracao = true;
+    }
   
   }on ClientException{
-    print('Erro de conexão');
+    mensagem_troca='Erro de conexão';
     //reserva_feita = false;
   }on NoSuchMethodError{
-    print('Erro de conexão');
+    mensagem_troca='Erro de conexão';
     //reserva_feita = false;
   }on SocketException{
-    print('Erro de conexão');
+    mensagem_troca='Erro de conexão';
     //reserva_feita = false;
   }
 }
