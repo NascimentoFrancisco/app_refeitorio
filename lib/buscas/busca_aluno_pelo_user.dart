@@ -7,23 +7,19 @@ import '../models/aluno.dart';
 import 'busa_reservas_aluno.dart';
 
 late Aluno _aluno;
+String aluno_first_name = '';
 
 Future buscaAlunoPeluUser(String nome_usuario,String senha,String id_user) async{
    
   String parametro = id_user;
-
+  
   BasicAuths auth = BasicAuths(usuario: nome_usuario, senha: senha);
 
-  //Url tem que ser alterada
   String url = 'https://refeitorio-cacor.herokuapp.com/user/$parametro/aluno';
-  //print('Inicio');
+
   var response = await http.get(Uri.parse(url), 
   headers: <String,String>{'authorization':auth.BasicAuth()});
   
-  //print(response.statusCode);
-  //print(response.body);
-
-  //Essa parte comentada será alterada depois, tudo fará parte de um try/cath
   List<dynamic> data = jsonDecode(response.body);
   var aluno = data[0];
   //print(aluno);
@@ -38,10 +34,17 @@ Future buscaAlunoPeluUser(String nome_usuario,String senha,String id_user) async
     pendencias: aluno['pendencias']
   );
 
+  List<String>lista = _aluno.nome.split(' ');
+  aluno_first_name = lista[0];
+
   await buscaReservasDeUmAluno(nome_usuario, senha, _aluno.id.toString());
 
 }
 
 Aluno retornaAluno(){
   return _aluno;
+}
+
+String retorna_first_name_aluno(){
+  return aluno_first_name;
 }

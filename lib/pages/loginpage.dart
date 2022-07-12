@@ -23,6 +23,17 @@ class _LoginPageState extends State<LoginPage> {
   bool get is_clicked => espera.value == true;
 
   String mensagem_de_erro = retorna_mensagem_erro();
+  
+  bool _obscured = false;
+  final textFieldFocusNode = FocusNode();
+
+  void _toggleObscured() {
+    setState(() {
+      _obscured = !_obscured;
+      if (textFieldFocusNode.hasPrimaryFocus) return; 
+      textFieldFocusNode.canRequestFocus = false;    
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +79,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 TextField(
                   controller: _passwordController,
-                  obscureText: true,
+                  obscureText: _obscured,
                   decoration: InputDecoration(
                       border: OutlineInputBorder(),
                       labelText: 'Insira sua senha',
@@ -76,24 +87,26 @@ class _LoginPageState extends State<LoginPage> {
                           borderSide:
                               BorderSide(color: Colors.greenAccent, width: 3)),
                       labelStyle:
-                          TextStyle(color: Color.fromARGB(255, 6, 168, 90))),
+                          TextStyle(color: Color.fromARGB(255, 6, 168, 90)),
+                      prefixIcon: Icon(Icons.lock_rounded,color: Color.fromARGB(255, 6, 168, 90),size: 24),
+                      suffixIcon: Padding(
+                        padding: const EdgeInsets.all(2),
+                        child: GestureDetector(
+                          onTap: _toggleObscured,
+                          child: Icon(
+                            _obscured 
+                              ? Icons.visibility_rounded
+                              : Icons.visibility_off_rounded,
+                              size: 24,
+                              color: Color.fromARGB(255, 6, 168, 90),
+                          ),
+                        ),
+                      )
+                      ),
                 ),
                 const SizedBox(height: 30),
                 ElevatedButton( 
                      onPressed: efetua_login,
-                    //   espera.value = true; 
-                    //   var login = await buscarUser(_userController.text, _passwordController.text);
-                    //   if(login){
-                    //     espera.value = false; 
-                    //     Navigator.pushReplacement(context, 
-                    //       MaterialPageRoute(builder: (context) => UserPage())
-                    //     );
-                    //   }else{
-                    //     espera.value = false; 
-                    //     showerro();
-                    //     // print('Dados errados');
-                    //   }
-                    // },
                     style: ElevatedButton.styleFrom(
                         primary: Color.fromARGB(255, 6, 168, 90)),
                     child: AnimatedBuilder(
@@ -151,7 +164,6 @@ class _LoginPageState extends State<LoginPage> {
       }else{
         espera.value = false; 
         showerro();
-        // print('Dados errados');
       }
     }
   }

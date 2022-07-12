@@ -3,7 +3,6 @@
 import 'package:app_refeitorio/buscas/busca_aluno_pelo_user.dart';
 import 'package:app_refeitorio/buscas/busca_horarios.dart';
 import 'package:app_refeitorio/componentes/refeicao_disponivel.dart';
-import 'package:app_refeitorio/componentes/semcardapio.dart';
 import 'package:app_refeitorio/models/aluno.dart';
 import 'package:app_refeitorio/models/horarios.dart';
 import 'package:app_refeitorio/models/refeicao.dart';
@@ -41,7 +40,7 @@ class _UserPageState extends State<UserPage> {
       child: Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
-          title: Text('Francisco',style: TextStyle(color: Colors.white),),
+          title: Text(retorna_first_name_aluno().toString(),style: TextStyle(color: Colors.white),),
           actions: [
             IconButton(onPressed: (){
               Navigator.push(context,
@@ -54,13 +53,11 @@ class _UserPageState extends State<UserPage> {
           backgroundColor: Color.fromARGB(255, 6, 168, 90),
         ),
         body: RetornaPage() 
-        //RefeicaoDisponivel()//ForaDeHorario()SemCardapio(),
       )
     );
   }
 
   Widget RetornaPage(){// Essa função retorna ou não uma refeição disponível
-    print(validarefeicao);
     if(!validarefeicao){
       return ForaDeHorario();
     }

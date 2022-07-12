@@ -6,7 +6,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 
+import '../buscas/busa_reservas_aluno.dart';
+import '../buscas/busca_aluno_pelo_user.dart';
+import '../buscas/busca_horarios.dart';
 import '../repositorios/alterar_senha.dart';
+import 'loginpage.dart';
 
 class AlterarSenha extends StatefulWidget {
   const AlterarSenha({Key? key}) : super(key: key);
@@ -24,14 +28,18 @@ class _AlterarSenhaState extends State<AlterarSenha> {
   final loading_pss = ValueNotifier<bool>(false);
 
   String mesnagem_troca_senha = retorna_mensagem();
+  bool situacao_troca = retorna_situacao();
   bool validacao_troca_senha = false;
+  bool _obscured = false;
+  
+  final textFieldFocusNode = FocusNode();
   
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Francisco'),
+          title: Text(retorna_first_name_aluno().toString()),
           backgroundColor: Color.fromARGB(255, 6, 168, 90),
         ),
         body: Padding(
@@ -48,7 +56,8 @@ class _AlterarSenhaState extends State<AlterarSenha> {
                 const SizedBox(height: 12),
                 TextField(
                   controller: _SenhaAntigaControler,
-                  obscureText: true,
+                  obscureText: _obscured,
+                  maxLength: 16,
                   decoration: InputDecoration(
                     labelText: 'Insira sua senha antiga',
                     border: OutlineInputBorder(),
@@ -56,17 +65,32 @@ class _AlterarSenhaState extends State<AlterarSenha> {
                       borderSide: BorderSide(
                         color: Colors.greenAccent,
                         width: 3
-                      )
+                      ),
                     ),
                     labelStyle: TextStyle(
                       color: Color.fromARGB(255, 6, 168, 90)
-                    )
+                    ),
+                    prefixIcon: Icon(Icons.lock_rounded,color: Color.fromARGB(255, 6, 168, 90),size: 24),
+                    suffixIcon: Padding(
+                        padding: const EdgeInsets.all(2),
+                        child: GestureDetector(
+                          onTap: _toggleObscured,
+                          child: Icon(
+                            _obscured 
+                              ? Icons.visibility_rounded
+                              : Icons.visibility_off_rounded,
+                              size: 24,
+                              color: Color.fromARGB(255, 6, 168, 90),
+                          ),
+                        ),
+                      )
                   ),
                 ),
                 const SizedBox(height: 8,),
                 TextField(
                   controller: _SenhaControler,
-                  obscureText: true,
+                  obscureText: _obscured,
+                  maxLength: 16,
                   decoration: InputDecoration(
                     labelText: 'Insira a nova senha',
                     border: OutlineInputBorder(),
@@ -78,13 +102,28 @@ class _AlterarSenhaState extends State<AlterarSenha> {
                     ),
                     labelStyle: TextStyle(
                       color: Color.fromARGB(255, 6, 168, 90)
-                    )
+                    ),
+                    prefixIcon: Icon(Icons.lock_rounded,color: Color.fromARGB(255, 6, 168, 90),size: 24),
+                    suffixIcon: Padding(
+                        padding: const EdgeInsets.all(2),
+                        child: GestureDetector(
+                          onTap: _toggleObscured,
+                          child: Icon(
+                            _obscured 
+                              ? Icons.visibility_rounded
+                              : Icons.visibility_off_rounded,
+                              size: 24,
+                              color: Color.fromARGB(255, 6, 168, 90),
+                          ),
+                        ),
+                      )
                   ),
                 ),
                 const SizedBox(height: 12),
                 TextField(
                   controller: _ConfirmSenhaControler,
-                  obscureText: true,
+                  obscureText: _obscured,
+                  maxLength: 16,
                   decoration: InputDecoration(
                     labelText: 'Confirme sua nova senha',
                     border: OutlineInputBorder(),
@@ -96,7 +135,21 @@ class _AlterarSenhaState extends State<AlterarSenha> {
                     ),
                     labelStyle: TextStyle(
                       color: Color.fromARGB(255, 6, 168, 90)
-                    )
+                    ),
+                    prefixIcon: Icon(Icons.lock_rounded,color: Color.fromARGB(255, 6, 168, 90),size: 24),
+                    suffixIcon: Padding(
+                        padding: const EdgeInsets.all(2),
+                        child: GestureDetector(
+                          onTap: _toggleObscured,
+                          child: Icon(
+                            _obscured 
+                              ? Icons.visibility_rounded
+                              : Icons.visibility_off_rounded,
+                              size: 24,
+                              color: Color.fromARGB(255, 6, 168, 90),
+                          ),
+                        ),
+                      )
                   ),
                 ),
                 const SizedBox(height: 30),
@@ -166,7 +219,24 @@ class _AlterarSenhaState extends State<AlterarSenha> {
         mesnagem_troca_senha = retorna_mensagem();
         validacao_troca_senha = retorna_situacao();
       });
-      showerro();
+      //showerro();
+      if(validacao_troca_senha){
+        limpa_lista_horarios();
+        limpa_lista_reservas();
+        Navigator.of(context).pop();
+        Navigator.of(context).pop();
+        Navigator.pushReplacement(context, 
+          MaterialPageRoute(builder: (context) => LoginPage())
+        );
+      }
     }
+  }
+
+  void _toggleObscured() {
+    setState(() {
+      _obscured = !_obscured;
+      if (textFieldFocusNode.hasPrimaryFocus) return; 
+      textFieldFocusNode.canRequestFocus = false;     
+    });
   }
 }

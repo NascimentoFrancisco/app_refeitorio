@@ -60,7 +60,7 @@ bool validaPossibilidadeRserva(int id_aluno,int id_refeicao){
   if(cont > 0){
     validator = false;
   }
-  print(validator);
+  
   return validator;
 
 }

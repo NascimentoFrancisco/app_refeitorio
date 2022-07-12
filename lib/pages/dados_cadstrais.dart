@@ -34,7 +34,7 @@ class _DadosCadastraisState extends State<DadosCadastrais> {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Francisco'),
+          title: Text(retorna_first_name_aluno().toString()),
           backgroundColor: Color.fromARGB(255, 6, 168, 90),
         ),
         body: SingleChildScrollView(

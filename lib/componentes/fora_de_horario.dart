@@ -73,20 +73,10 @@ class _ForaDeHorarioState extends State<ForaDeHorario> {
                 child: ListView.builder(
                   itemCount: listaDeHorarios.length,
                   itemBuilder: (context, index){
-                    return ListTile(//Erros nas horas, provavelmente por causa do formato de hora
+                    return ListTile(
                       title: Text('${listaDeHorarios[index].categoria == 'A' ?ALMOCO:JANTA}: das ${DateFormat('HH:mm').format(listaDeHorarios[index].inicio_reserva_prioritario)} às ${DateFormat('HH:mm').format(listaDeHorarios[index].fim_reserva)} para alunos da ${listaDeHorarios[index].turno_prioridade == 'M' ?Manha:Tarde} e das ${DateFormat('HH:mm').format(listaDeHorarios[index].inicio_reserva)} às ${DateFormat('HH:mm').format(listaDeHorarios[index].fim_reserva)} para os demais turnos.'),
                     );
                   },
-                  /*children: [
-                    Padding(
-                      padding: const EdgeInsets.all(6.0),
-                      child: Text('${listaDeHorarios[0].categoria == 'A' ?ALMOCO:JANTA}: das ${DateFormat('HH:mm').format(listaDeHorarios[0].inicio_reserva_prioritario)} às ${DateFormat('HH:mm').format(listaDeHorarios[0].fim_reserva)} para alunos da ${listaDeHorarios[0].inicio_reserva_prioritario == 'M' ?Manha:Tarde} e das ${DateFormat('HH:mm').format(listaDeHorarios[0].inicio_reserva)} às ${DateFormat('HH:mm').format(listaDeHorarios[0].fim_reserva)} para os demais turnos.')
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(6.0),
-                      child: Text('${listaDeHorarios[1].categoria == 'A' ?ALMOCO:JANTA}: das ${DateFormat('HH:mm').format(listaDeHorarios[1].inicio_reserva_prioritario)} às ${DateFormat('HH:mm').format(listaDeHorarios[1].fim_reserva)} para alunos da ${listaDeHorarios[1].inicio_reserva_prioritario == 'M' ?Manha:Tarde} e das ${DateFormat('HH:mm').format(listaDeHorarios[1].inicio_reserva)} às ${DateFormat('HH:mm').format(listaDeHorarios[1].fim_reserva)} para os demais turnos.')
-                    ),
-                  ],*/
                 ),
               )
             ],

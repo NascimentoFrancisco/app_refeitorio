@@ -10,7 +10,7 @@ void MostrarSobre(BuildContext context){
         TextButton(onPressed: (){
           Navigator.of(context).pop();
         }, 
-          child: Text('FECHAR', style: TextStyle(color: Color.fromARGB(255, 2, 155, 40), fontSize: 16),)
+          child: Text('FECHAR', style: TextStyle(color: Color.fromARGB(255, 236, 17, 17), fontSize: 16),)
         )
       ],    
     )

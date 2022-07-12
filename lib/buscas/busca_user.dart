@@ -18,7 +18,6 @@ String mensagem_erro = '';
 String user_reserva = '';
 String senha_reserva = '';
 
-
 Future buscarUser(String nome_usuario, String senha)async{
   
   if(nome_usuario.isEmpty || senha.isEmpty){
@@ -35,15 +34,12 @@ Future buscarUser(String nome_usuario, String senha)async{
     response = await http.get(Uri.parse(url),
     headers: <String,String>{'authorization':basicAuth.BasicAuth()});
 
-    //print(response.statusCode);
-    //print(response.body);
   }on ClientException{
     mensagem_erro = 'Erro de conexão';
   }on SocketException{
     mensagem_erro = 'Erro de conexão';
   }
-  //List<dynamic> data = jsonDecode(response.body);  
-  //var user = data[0]; 
+   
   try{
     if (response.statusCode == 200){
       List<dynamic> data = jsonDecode(response.body);  
@@ -57,7 +53,6 @@ Future buscarUser(String nome_usuario, String senha)async{
       return true;
     
     }else if(response.statusCode == 401){
-      //print('erro 401');
       mensagem_erro = 'CPF ou senha incorreto!';
       return false;
     }else{
@@ -66,15 +61,12 @@ Future buscarUser(String nome_usuario, String senha)async{
   }on ClientException{
     mensagem_erro = 'Erro de conexão';
   }on NoSuchMethodError{
-    //erro_conexao = true;
     mensagem_erro = 'Erro de conexão';
     return false;
   }on SocketException{
-    //erro_conexao = true;
     mensagem_erro = 'Erro de conexão';
     return false;
   }
-  //return response;
 }
 
 User retornaUsuario(){

@@ -17,7 +17,6 @@ Future buscaHorarios(String nome_usuario,String senha) async{
   var response = await http.get(Uri.parse(url), 
   headers: <String,String>{'authorization':auth.BasicAuth()});
 
-  //print(response.body);
   List<dynamic> data = jsonDecode(response.body);
 
   data.forEach((element) { 

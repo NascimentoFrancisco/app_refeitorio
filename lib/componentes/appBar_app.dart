@@ -7,6 +7,7 @@ import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 
 import '../buscas/busa_reservas_aluno.dart';
+import '../buscas/busca_aluno_pelo_user.dart';
 import '../buscas/busca_horarios.dart';
 import '../pages/alterar_senha.dart';
 import '../pages/loginpage.dart';
@@ -26,7 +27,7 @@ class _AppBarAppState extends State<AppBarApp> {
         child: Column(
           children: [
             AppBar(
-              title: Text('Francisco'),
+              title: Text(retorna_first_name_aluno().toString()),
               backgroundColor: Color.fromARGB(255, 6, 168, 90),
             ),
             Divider(),
