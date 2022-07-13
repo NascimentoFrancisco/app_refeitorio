@@ -30,7 +30,7 @@ class _AlterarSenhaState extends State<AlterarSenha> {
   String mesnagem_troca_senha = retorna_mensagem();
   bool situacao_troca = retorna_situacao();
   bool validacao_troca_senha = false;
-  bool _obscured = false;
+  bool _obscured = true;
   
   final textFieldFocusNode = FocusNode();
   
@@ -42,140 +42,142 @@ class _AlterarSenhaState extends State<AlterarSenha> {
           title: Text(retorna_first_name_aluno().toString()),
           backgroundColor: Color.fromARGB(255, 6, 168, 90),
         ),
-        body: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Center(
-            child: Column(
-              children: [
-                Text('Alterar senha',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 22
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Center(
+              child: Column(
+                children: [
+                  Text('Alterar senha',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 22
+                    ),
                   ),
-                ),
-                const SizedBox(height: 12),
-                TextField(
-                  controller: _SenhaAntigaControler,
-                  obscureText: _obscured,
-                  maxLength: 16,
-                  decoration: InputDecoration(
-                    labelText: 'Insira sua senha antiga',
-                    border: OutlineInputBorder(),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Colors.greenAccent,
-                        width: 3
+                  const SizedBox(height: 12),
+                  TextField(
+                    controller: _SenhaAntigaControler,
+                    obscureText: _obscured,
+                    maxLength: 16,
+                    decoration: InputDecoration(
+                      labelText: 'Insira sua senha antiga',
+                      border: OutlineInputBorder(),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Colors.greenAccent,
+                          width: 3
+                        ),
                       ),
-                    ),
-                    labelStyle: TextStyle(
-                      color: Color.fromARGB(255, 6, 168, 90)
-                    ),
-                    prefixIcon: Icon(Icons.lock_rounded,color: Color.fromARGB(255, 6, 168, 90),size: 24),
-                    suffixIcon: Padding(
-                        padding: const EdgeInsets.all(2),
-                        child: GestureDetector(
-                          onTap: _toggleObscured,
-                          child: Icon(
-                            _obscured 
-                              ? Icons.visibility_rounded
-                              : Icons.visibility_off_rounded,
-                              size: 24,
-                              color: Color.fromARGB(255, 6, 168, 90),
+                      labelStyle: TextStyle(
+                        color: Color.fromARGB(255, 6, 168, 90)
+                      ),
+                      prefixIcon: Icon(Icons.lock_rounded,color: Color.fromARGB(255, 6, 168, 90),size: 24),
+                      suffixIcon: Padding(
+                          padding: const EdgeInsets.all(2),
+                          child: GestureDetector(
+                            onTap: _toggleObscured,
+                            child: Icon(
+                              _obscured 
+                                ? Icons.visibility_rounded
+                                : Icons.visibility_off_rounded,
+                                size: 24,
+                                color: Color.fromARGB(255, 6, 168, 90),
+                            ),
                           ),
-                        ),
-                      )
+                        )
+                    ),
                   ),
-                ),
-                const SizedBox(height: 8,),
-                TextField(
-                  controller: _SenhaControler,
-                  obscureText: _obscured,
-                  maxLength: 16,
-                  decoration: InputDecoration(
-                    labelText: 'Insira a nova senha',
-                    border: OutlineInputBorder(),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Colors.greenAccent,
-                        width: 3
-                      )
-                    ),
-                    labelStyle: TextStyle(
-                      color: Color.fromARGB(255, 6, 168, 90)
-                    ),
-                    prefixIcon: Icon(Icons.lock_rounded,color: Color.fromARGB(255, 6, 168, 90),size: 24),
-                    suffixIcon: Padding(
-                        padding: const EdgeInsets.all(2),
-                        child: GestureDetector(
-                          onTap: _toggleObscured,
-                          child: Icon(
-                            _obscured 
-                              ? Icons.visibility_rounded
-                              : Icons.visibility_off_rounded,
-                              size: 24,
-                              color: Color.fromARGB(255, 6, 168, 90),
+                  const SizedBox(height: 8,),
+                  TextField(
+                    controller: _SenhaControler,
+                    obscureText: _obscured,
+                    maxLength: 16,
+                    decoration: InputDecoration(
+                      labelText: 'Insira a nova senha',
+                      border: OutlineInputBorder(),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Colors.greenAccent,
+                          width: 3
+                        )
+                      ),
+                      labelStyle: TextStyle(
+                        color: Color.fromARGB(255, 6, 168, 90)
+                      ),
+                      prefixIcon: Icon(Icons.lock_rounded,color: Color.fromARGB(255, 6, 168, 90),size: 24),
+                      suffixIcon: Padding(
+                          padding: const EdgeInsets.all(2),
+                          child: GestureDetector(
+                            onTap: _toggleObscured,
+                            child: Icon(
+                              _obscured 
+                                ? Icons.visibility_rounded
+                                : Icons.visibility_off_rounded,
+                                size: 24,
+                                color: Color.fromARGB(255, 6, 168, 90),
+                            ),
                           ),
-                        ),
-                      )
+                        )
+                    ),
                   ),
-                ),
-                const SizedBox(height: 12),
-                TextField(
-                  controller: _ConfirmSenhaControler,
-                  obscureText: _obscured,
-                  maxLength: 16,
-                  decoration: InputDecoration(
-                    labelText: 'Confirme sua nova senha',
-                    border: OutlineInputBorder(),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Colors.greenAccent,
-                        width: 3
-                      )
-                    ),
-                    labelStyle: TextStyle(
-                      color: Color.fromARGB(255, 6, 168, 90)
-                    ),
-                    prefixIcon: Icon(Icons.lock_rounded,color: Color.fromARGB(255, 6, 168, 90),size: 24),
-                    suffixIcon: Padding(
-                        padding: const EdgeInsets.all(2),
-                        child: GestureDetector(
-                          onTap: _toggleObscured,
-                          child: Icon(
-                            _obscured 
-                              ? Icons.visibility_rounded
-                              : Icons.visibility_off_rounded,
-                              size: 24,
-                              color: Color.fromARGB(255, 6, 168, 90),
+                  const SizedBox(height: 12),
+                  TextField(
+                    controller: _ConfirmSenhaControler,
+                    obscureText: _obscured,
+                    maxLength: 16,
+                    decoration: InputDecoration(
+                      labelText: 'Confirme sua nova senha',
+                      border: OutlineInputBorder(),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Colors.greenAccent,
+                          width: 3
+                        )
+                      ),
+                      labelStyle: TextStyle(
+                        color: Color.fromARGB(255, 6, 168, 90)
+                      ),
+                      prefixIcon: Icon(Icons.lock_rounded,color: Color.fromARGB(255, 6, 168, 90),size: 24),
+                      suffixIcon: Padding(
+                          padding: const EdgeInsets.all(2),
+                          child: GestureDetector(
+                            onTap: _toggleObscured,
+                            child: Icon(
+                              _obscured 
+                                ? Icons.visibility_rounded
+                                : Icons.visibility_off_rounded,
+                                size: 24,
+                                color: Color.fromARGB(255, 6, 168, 90),
+                            ),
                           ),
-                        ),
-                      )
+                        )
+                    ),
                   ),
-                ),
-                const SizedBox(height: 30),
-                ElevatedButton(onPressed: ()async {
-                  loading_pss.value = true;
-                  await efetua_troca_senha(_SenhaAntigaControler.text,_SenhaControler.text,_ConfirmSenhaControler.text);
-                }, 
-                  child: AnimatedBuilder(
-                    animation: loading_pss,
-                    builder: (context,_){
-                      return loading_pss.value 
-                      ? const SizedBox(
-                        width: 20,
-                        height: 20,
-                        child: CircularProgressIndicator(color: Colors.white,),
-                      )
-                      :const Text('ALTERAR SENHA',
-                          style: TextStyle(color: Colors.white, fontSize: 14),
-                        );
-                    },
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    primary: Color.fromARGB(255, 6, 168, 90)
-                  ),
-                )
-              ],
+                  const SizedBox(height: 30),
+                  ElevatedButton(onPressed: ()async {
+                    loading_pss.value = true;
+                    await efetua_troca_senha(_SenhaAntigaControler.text,_SenhaControler.text,_ConfirmSenhaControler.text);
+                  }, 
+                    child: AnimatedBuilder(
+                      animation: loading_pss,
+                      builder: (context,_){
+                        return loading_pss.value 
+                        ? const SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(color: Colors.white,),
+                        )
+                        :const Text('ALTERAR SENHA',
+                            style: TextStyle(color: Colors.white, fontSize: 14),
+                          );
+                      },
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      primary: Color.fromARGB(255, 6, 168, 90)
+                    ),
+                  )
+                ],
+              ),
             ),
           ),
         ),

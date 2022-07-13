@@ -4,8 +4,8 @@ void MostrarSobre(BuildContext context){
   showDialog(
     context: context, 
     builder: (context) => AlertDialog(
-      title: const Text('Aplicativo android do sistema de Reservas de Refeição.'),
-      content: const Text('Aplicativo desenvolvido por Francisco Leite do Nascimento aluno do módulo V do curso de Análise e Desenvolvimento de Sistemas.'),
+      title: const Text('Aplicativo android do sistema de Reservas de Refeições.'),
+      content: const Text('Aplicativo desenvolvido por Francisco Leite do Nascimento aluno do módulo V 2022.1 do curso de Análise e Desenvolvimento de Sistemas.'),
       actions: [
         TextButton(onPressed: (){
           Navigator.of(context).pop();

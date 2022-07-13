@@ -52,7 +52,9 @@ class _UserPageState extends State<UserPage> {
           ],
           backgroundColor: Color.fromARGB(255, 6, 168, 90),
         ),
-        body: RetornaPage() 
+        body: SingleChildScrollView(
+          child: RetornaPage()
+        ) 
       )
     );
   }

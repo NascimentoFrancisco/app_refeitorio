@@ -49,7 +49,7 @@ class _RefeicaoDisponivelState extends State<RefeicaoDisponivel> {
   String texto_butao_cancelar_reserva = 'CANCELAR RESERVA'; 
 
   String texto_confirma_reservar = 'Confirma a reserva da refeiçao?';
-  String texto_confirma_cancelamento_reservar = 'Confirma o cancelamento reserva da refeiçao?';
+  String texto_confirma_cancelamento_reservar = 'Confirma o cancelamento de reserva da refeiçao?';
 
   String reservas_esgotadas = '';
   bool valida_reserva_esgotadas = false;
@@ -180,7 +180,7 @@ class _RefeicaoDisponivelState extends State<RefeicaoDisponivel> {
           TextButton(onPressed: () {
             Navigator.of(context).pop();
           }, 
-            child: const Text('Cancelar'),
+            child: const Text('Fechar'),
             style: TextButton.styleFrom(primary: Colors.red),
           ),
           TextButton(

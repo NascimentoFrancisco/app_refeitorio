@@ -24,7 +24,7 @@ class _LoginPageState extends State<LoginPage> {
 
   String mensagem_de_erro = retorna_mensagem_erro();
   
-  bool _obscured = false;
+  bool _obscured = true;
   final textFieldFocusNode = FocusNode();
 
   void _toggleObscured() {
@@ -79,6 +79,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 TextField(
                   controller: _passwordController,
+                  keyboardType: TextInputType.visiblePassword,
                   obscureText: _obscured,
                   decoration: InputDecoration(
                       border: OutlineInputBorder(),
