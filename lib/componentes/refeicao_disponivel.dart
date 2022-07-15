@@ -30,7 +30,7 @@ class _RefeicaoDisponivelState extends State<RefeicaoDisponivel> {
   final loading = ValueNotifier<bool>(false);
 
   bool get is_clicked_confirm => loading.value == true;
-
+ 
   bool validacao = validaPossibilidadeRserva(retornaAluno().id,retornaRefeicaoDisponivel().id);
 
   Color cor_pode_reservar = Color.fromARGB(255, 2, 136, 71);
@@ -134,7 +134,7 @@ class _RefeicaoDisponivelState extends State<RefeicaoDisponivel> {
               ),
             ),
             const SizedBox(height: 8.0),
-            Text('Data de hoje: ${DateFormat('dd/MM/yyyy - HH:mm').format(PegaDataHoje())}',
+            Text('Data de hoje: ${DateFormat('dd/MM/yyyy - HH:mm:ss ').format(PegaDataHoje())}',
               style: TextStyle(color: Colors.black, fontSize: 14
               ),
             ),
@@ -178,7 +178,8 @@ class _RefeicaoDisponivelState extends State<RefeicaoDisponivel> {
         content: Text(validacao ?texto_confirma_reservar:texto_confirma_cancelamento_reservar),
         actions: [
           TextButton(onPressed: () {
-            Navigator.of(context).pop();
+              Navigator.of(context).pop();
+              loading.value = false;
           }, 
             child: const Text('Fechar'),
             style: TextButton.styleFrom(primary: Colors.red),
@@ -205,6 +206,7 @@ class _RefeicaoDisponivelState extends State<RefeicaoDisponivel> {
   }
 
   void showerro(){
+    loading.value = false;
     setState(() {
       mesnagem_erro_acerto_reseva = retorna_mensagem_erro_reserva();
     });
@@ -214,13 +216,16 @@ class _RefeicaoDisponivelState extends State<RefeicaoDisponivel> {
         title: Text('Atenção!'),
         content: Text(mesnagem_erro_acerto_reseva),
         actions: [
-          TextButton(onPressed: () { 
+          TextButton(onPressed: () {
+            //
             setState(() {
               _refeicaoDisponivel = retorna_nova_refeicao_disponivel();
               reserva_do_aluno = retorna_nova_reserva();
             });
-            loading.value = false;
+             
+            // clik_fechar.value = false;
             Navigator.of(context).pop();
+            
           }, 
             child: const Text('Fechar'),
             style: TextButton.styleFrom(primary: Colors.red),
@@ -249,7 +254,12 @@ class _RefeicaoDisponivelState extends State<RefeicaoDisponivel> {
             validacao = false;
           });
         }
-        Navigator.of(context).pop();
+
+        //Navigator.of(context).pop();
+        //loading.value = false;
+        if(loading.value){
+          Navigator.of(context).pop();
+        }
         showerro();
       }else{
         //Cancelar reserva
@@ -262,7 +272,11 @@ class _RefeicaoDisponivelState extends State<RefeicaoDisponivel> {
           mesnagem_erro_acerto_reseva = retorna_mensagem_erro_reserva();
           validacao = true;
         }
-        Navigator.of(context).pop();
+        //Navigator.of(context).pop();
+        
+        if(loading.value){
+          Navigator.of(context).pop();
+        }
           showerro();
       }
     }
